@@ -1,0 +1,95 @@
+* {
+    font-size: 14px;
+}
+
+.fromDiv {
+    font-size: 16px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.snpDiv {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.headerDiv {
+    margin-top: -10px;
+    border-width: 15px 8px 12px 8px;
+    -webkit-border-image: url("file:///android_asset/ic_email_thread_open_top_default.9.png") 15 8 8 8;
+}
+
+.superCollapsedDiv {
+    margin-top: -5px;
+    border-width: 30px 8px 2px 8px;
+    background-color: #efefef;
+    line-height: 10px;
+    text-align: left;
+}
+
+.size1 {
+  -webkit-border-image: url("file:///android_asset/ic_email_thread_supercompressed1.9.png") 9 8 0 8 / 9 8 0 9;
+}
+
+.size2 {
+  -webkit-border-image: url("file:///android_asset/ic_email_thread_supercompressed2.9.png") 17 8 0 8 / 17 8 0 9;
+}
+
+.sizen {
+    -webkit-border-image: url("file:///android_asset/ic_email_thread_supercompressed.9.png") 17 8 0 8 / 17 8 0 9;
+}
+
+.superCollapsedLabel {
+    padding-bottom: 12px;
+}
+
+.bodyDiv {
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.bodyCell {
+/*
+    border-right: thin solid #999999;
+*/
+}
+
+.conversationHeaderDiv {
+    font-size: 15px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 15px;
+}
+
+#labels {
+    padding-top: 5px;
+}
+
+.labelsDiv {
+    font-size: 12px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-width: 2px 2px 2px 2px;
+    background-color: #57a1d0;
+    color: #ffffff;
+}
+
+.attachmentDiv {
+    width: 100%;
+    background-color: #efefef;
+    margin-bottom: 4px;
+} 
+
+body {
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    padding: 0px;
+}
