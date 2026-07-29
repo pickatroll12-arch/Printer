@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=scanqueue
+GenericName=Cola de escaneo
+Comment=Cola de trabajos de escaneo para Canon G2010 vía AirSane
+Exec=scanqueue
+Icon=scanqueue
+Terminal=true
+Categories=Utility;Scanning;
+Keywords=escaner;scanner;canon;g2010;airsane;nextcloud;

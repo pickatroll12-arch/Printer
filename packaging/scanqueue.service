@@ -1,0 +1,47 @@
+# Servicio de usuario: systemctl --user enable --now scanqueue
+#
+# Se instala en ~/.config/systemd/user/scanqueue.service. Como servicio de
+# usuario escribe en ~/Nextcloud sin lios de permisos y ve la sesion del
+# escritorio (util para post_command con notify-send).
+#
+# Para que arranque sin iniciar sesion grafica:  sudo loginctl enable-linger $USER
+
+[Unit]
+Description=scanqueue - cola de escaneo para Canon G2010 (AirSane)
+Documentation=https://github.com/pickatroll12-arch/printer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+# 'all', no 'main': el runtime del AppImage se bifurca, asi que el READY=1 lo
+# manda un proceso hijo. Con NotifyAccess=main systemd lo ignoraria y acabaria
+# matando el servicio por timeout de arranque.
+NotifyAccess=all
+ExecStart=/usr/local/bin/scanqueue serve
+Environment=PYTHONUNBUFFERED=1
+# Si el AppImage esta en otro sitio, ajusta ExecStart o define SCANQUEUE_CONFIG:
+# Environment=SCANQUEUE_CONFIG=%h/.config/scanqueue/scanqueue.ini
+
+Restart=always
+RestartSec=5
+# Un reinicio en bucle no arregla un escaner desenchufado: paramos si insiste.
+StartLimitIntervalSec=300
+StartLimitBurst=10
+
+# El servicio espera a airsaned por si solo, no hace falta forzar el orden.
+TimeoutStopSec=30
+# Se deja el KillMode por defecto (control-group) a proposito: con 'mixed' la
+# señal iria solo al envoltorio del AppImage y el proceso Python nunca cerraria
+# ordenadamente (cola sin vaciar, socket huerfano).
+
+# Endurecimiento prudente: en unidades de usuario, las opciones que montan
+# espacios de nombres (PrivateTmp, ProtectSystem) fallan en algunas
+# configuraciones y dejarian el servicio sin arrancar. No compensa.
+NoNewPrivileges=true
+# Techo de memoria por si un escaneo a 1200 ppp se desmadra. Requiere
+# delegacion del controlador de memoria; si no la hay, systemd solo avisa.
+MemoryMax=256M
+
+[Install]
+WantedBy=default.target
