@@ -1,0 +1,68 @@
+# Configuracion de scanqueue.
+# Copiar a ~/.config/scanqueue/scanqueue.ini y ajustar.
+# Todas las claves admiten sobreescritura por entorno:
+#   SCANQUEUE_<SECCION>_<CLAVE>   p. ej. SCANQUEUE_SCAN_DEFAULT_DPI=600
+
+[service]
+# Interfaz HTTP. Deja 'port' vacio para desactivarla; 0 = puerto libre al azar.
+host = 127.0.0.1
+port = 8099
+# Socket UNIX (opcional pero recomendado para scripts y lanzadores de XFCE).
+unix_socket = ~/.local/share/scanqueue/scanqueue.sock
+socket_mode = 0660
+# Token opcional para la API HTTP (cabecera Authorization: Bearer <token>).
+# Imprescindible si cambias host a 0.0.0.0.
+auth_token =
+max_queue = 50
+state_dir = ~/.local/share/scanqueue
+# Dias que se conserva el historial de trabajos en la base de datos (0 = siempre).
+# No borra NUNCA ficheros escaneados, solo registros.
+history_days = 30
+
+[airsane]
+base_url = http://127.0.0.1:8090
+# Nombre o ruta del escaner dentro de AirSane. Vacio = autodescubrimiento.
+scanner =
+health_timeout = 5
+# Segundos que se espera activamente a que systemd reinicie airsaned.
+health_wait = 180
+health_poll = 3
+systemd_unit = airsaned.service
+
+[scan]
+# escl = a traves de AirSane (recomendado: no pelea por el USB).
+# scanimage = SANE directo; solo si airsaned esta parado.
+backend = escl
+default_dpi = 300
+default_format = pdf
+default_mode = color
+default_source = platen
+# max, a4, letter, legal, a5, a6
+default_page = a4
+# Tiempo maximo de un intento de escaneo. A 600 ppp en color sube bastante.
+job_timeout = 240
+max_attempts = 3
+# Backoff exponencial: 4s, 8s, 16s... con tope en backoff_max (+-20% de jitter).
+backoff_base = 4
+backoff_factor = 2
+backoff_max = 60
+scanimage_device =
+# Hook opcional tras guardar. Recibe SCANQUEUE_FILE, SCANQUEUE_JOB_ID,
+# SCANQUEUE_FORMAT y SCANQUEUE_DPI en el entorno.
+# post_command = notify-send "Escaneo listo" "$SCANQUEUE_FILE"
+post_command =
+
+[output]
+# Carpeta sincronizada por el cliente de Nextcloud.
+dir = ~/Nextcloud/Escaneos
+filename_template = scan_{date}_{time}_{job_id}.{ext}
+file_mode = 0644
+
+[logging]
+file = ~/.local/share/scanqueue/scanqueue.log
+audit_file = ~/.local/share/scanqueue/audit.jsonl
+level = INFO
+max_bytes = 5242880
+backups = 5
+# false cuando corre bajo systemd si no quieres duplicar en el journal.
+console = true

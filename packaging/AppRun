@@ -1,0 +1,28 @@
+#!/bin/sh
+# AppRun de scanqueue: arranca el interprete embebido con el paquete incluido.
+set -eu
+
+HERE="$(dirname "$(readlink -f "$0")")"
+export APPDIR="${APPDIR:-$HERE}"
+
+# El paquete scanqueue vive en usr/lib/scanqueue-app/ (junto al interprete).
+export PYTHONPATH="$APPDIR/usr/lib/scanqueue-app${PYTHONPATH:+:$PYTHONPATH}"
+export PYTHONDONTWRITEBYTECODE=1
+
+# Interprete embebido si existe (build completo); si no, el del sistema.
+PYTHON=""
+for candidate in "$APPDIR"/opt/python*/bin/python3.* "$APPDIR"/usr/bin/python3; do
+    if [ -x "$candidate" ]; then
+        PYTHON="$candidate"
+        break
+    fi
+done
+if [ -z "$PYTHON" ]; then
+    PYTHON="$(command -v python3 || true)"
+fi
+if [ -z "$PYTHON" ]; then
+    echo "scanqueue: no se encontro ningun interprete de Python 3" >&2
+    exit 1
+fi
+
+exec "$PYTHON" -m scanqueue "$@"
